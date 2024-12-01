@@ -13,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`font-inter antialiased leading-relaxed selection:bg-purple selection:text-indigo-200`}
+        className={`h-full font-inter antialiased leading-relaxed selection:bg-purple selection:text-indigo-200`}
       >
         <div id="__next">{children}</div>
       </body>
