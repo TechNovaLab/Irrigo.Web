@@ -10,7 +10,7 @@ const PagesLayout: React.FC<PagesLayoutProps> = ({ children }) => {
     <div
       className={`flex flex-col min-h-screen bg-white text-[#1f1633] dark:bg-[#1f1633] dark:text-white transition-colors duration-300`}
     >
-      <header className="w-full border-b border-gray-200 dark:border-gray-700">
+      <header className="w-full border-b border-indigo-200 dark:border-indigo-700">
         <div className="max-w-5xl mx-auto px-4 flex justify-between items-center h-16">
           <div className="text-3xl font-bold tracking-tight text-slate-200 sm:text-3xl">
             TechNovaLab/Irrigo
@@ -37,7 +37,7 @@ const PagesLayout: React.FC<PagesLayoutProps> = ({ children }) => {
         {children}
       </main>
 
-      <footer className="w-full border-t border-gray-200 dark:border-gray-700">
+      <footer className="w-full border-t border-indigo-100 dark:border-indigo-900">
         <div className="max-w-4xl mx-auto px-4 py-4 text-center text-sm">
           &copy; {new Date().getFullYear()} TechNovaLab · Irrigo. Todos los
           derechos reservados.
