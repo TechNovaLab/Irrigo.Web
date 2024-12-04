@@ -20,41 +20,32 @@ export default function SignupForm() {
       <div className={styles.signupForm}>
         {toast.message && <Toast message={toast.message} type={toast.type} />}
         {/* <form className={styles.customSpace}> */}
-        <form className="space-y-6">
-          <div>
-            <Input
-              label="Nombre"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <Input
-              label="Apellido"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <InputPassword
-              label="Contraseña"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-
+        <form className="space-y-4">
+          <Input
+            label="Nombre"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleInputChange}
+          />
+          <Input
+            label="Apellido"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+          />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <InputPassword
+            label="Contraseña"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+          />
           <div className="flex justify-between">
             <button
               type="button"
