@@ -1,5 +1,7 @@
-import "./globals.css";
+"use client";
 
+import "./globals.css";
+import { AuthProvider } from "@/contexts/auth/AuthContext";
 // import type { Metadata } from "next";
 
 // export const metadata: Metadata = {
@@ -17,7 +19,9 @@ export default function RootLayout({
       <body
         className={`h-full font-inter antialiased leading-relaxed selection:bg-purple selection:text-indigo-200`}
       >
-        <div id="__next">{children}</div>
+        <div id="__next">
+          <AuthProvider>{children}</AuthProvider>
+        </div>
       </body>
     </html>
   );

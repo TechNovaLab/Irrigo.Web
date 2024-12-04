@@ -32,10 +32,3 @@ button.secondary {
 
   @apply px-4 py-2 hover:bg-[#6a5fc1] text-xs text-white border-solid border-2 border-slate-50 hover:border-[#6a5fc1] rounded hover:bg-opacity-90 transition;
 }
-.customSpace {
-  @apply space-y-6;
-}
-/* 
-.customSpace > * + * {
-  margin-top: 1.25rem; 
-} */
