@@ -1,4 +1,4 @@
-import { UserIdentity } from "@/features/auth/types";
+import { UserIdentity } from "@/features/login/types";
 const USER_KEY = "user_identity";
 
 export const getSession = (): UserIdentity | null => {
