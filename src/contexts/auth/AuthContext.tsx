@@ -1,27 +1,35 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AuthContextProps } from "./types";
-import { UserIdentity } from "@/features/login/types";
-import { clearSession, getSession, saveSession } from "@/utils/sessionStorage";
-import { loginService } from "@/features/login/loginService";
+import { AuthContextProps } from "./auth.types";
+import { UserIdentity } from "@/features/login/login.types";
+import { cookieStorageManager } from "@/utils";
+import { loginUser } from "@/features/login";
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<UserIdentity | null>(getSession);
+  const [user, setUser] = useState<UserIdentity | null>(null);
+  const storage_key = "user_identity";
 
   useEffect(() => {
-    if (user) saveSession(user);
-  }, [user]);
+    const data = cookieStorageManager.get(storage_key);
+    setUser(data ?? null);
+  }, []);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     cookieStorageManager.set(storage_key, user, { maxAge: 60 * 60 * 24 * 1 });
+  //   }
+  // }, [user]);
 
   const login = async (email: string, password: string) => {
-    const data = await loginService({ email, password });
+    const data = await loginUser({ email, password });
     setUser(data);
   };
 
   const logout = () => {
     setUser(null);
-    clearSession();
+    cookieStorageManager.remove(storage_key);
   };
 
   return (
@@ -35,6 +43,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+
+  if (!context)
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
+
   return context;
 };

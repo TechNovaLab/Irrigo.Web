@@ -1,15 +1,22 @@
-import { UserIdentity } from "./types";
-import { fetchClient } from "@/utils";
-
-type request = {
-  email: string;
-  password: string;
-};
+import { UserIdentity, LoginCredentials } from "./login.types";
+import { cookieStorageManager, fetchClient } from "@/utils";
 
 const BASE_URL = "https://localhost:5001/api/users";
-export const loginService = async (payload: request): Promise<UserIdentity> => {
-  return fetchClient(`${BASE_URL}/login`, {
+const STORAGE_KEY = "user_identity";
+
+const loginUser = async (
+  credentials: LoginCredentials
+): Promise<UserIdentity> => {
+  const user = await fetchClient(`${BASE_URL}/login`, {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify(credentials),
   });
+
+  cookieStorageManager.set(STORAGE_KEY, user, {
+    maxAge: 60 * 60 * 24 * 1,
+  });
+
+  return user;
 };
+
+export { loginUser };

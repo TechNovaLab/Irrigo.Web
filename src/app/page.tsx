@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import React from "react";
 
 const AppRoot = async () => {
-  redirect("/welcome");
+  // redirect("/welcome");
   return <></>;
 };
 
