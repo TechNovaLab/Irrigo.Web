@@ -1,10 +1,9 @@
 import React from "react";
 
-export default function DashboardLayout({ children }) {
-  return (
-    <div>
-      <h1>Layout Dashboard</h1>
-      {children}
-    </div>
-  );
+export default function DashboradLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return <div>{children}</div>;
 }

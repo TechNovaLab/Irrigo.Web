@@ -4,12 +4,14 @@ import React, { createContext, useContext, useState } from "react";
 import { generateGuestCredentials } from "@/utils/guestHelpers";
 import { SignupContextProps, SignupFormData, ToastData } from "./signup.types";
 import { registerUser } from "./signupService";
+import { useAuth } from "@/contexts/auth/AuthContext";
 
 const SignupContext = createContext<SignupContextProps | undefined>(undefined);
 
 export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState<SignupFormData>({
     firstName: "",
     lastName: "",
@@ -32,6 +34,7 @@ export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       const response = await registerUser(payload);
+      await login(payload.email, payload.password);
 
       setToast({
         message: `Registro ${isGuest ? "como invitado" : ""} exitoso. ID: ${

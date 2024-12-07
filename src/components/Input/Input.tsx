@@ -18,7 +18,7 @@ const Input: React.FC<InputProps> = ({
       </label>
       <div className="mt-2">
         <input
-          id="email"
+          id={name}
           type={type}
           name={name}
           value={value}

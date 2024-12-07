@@ -3,39 +3,56 @@ import { AuthContextProps } from "./auth.types";
 import { UserIdentity } from "@/features/login/login.types";
 import { cookieStorageManager } from "@/utils";
 import { loginUser } from "@/features/login";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<UserIdentity | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const storage_key = "user_identity";
+
+  const isTokenValid = (token: string): boolean => {
+    try {
+      const { exp } = jwtDecode<{ exp: number }>(token);
+      return Date.now() < exp * 1000;
+    } catch (error) {
+      console.log("Token error", error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     const data = cookieStorageManager.get(storage_key);
-    setUser(data ?? null);
+    console.log("AuthContext: Checking storage key data:", data);
+    if (data && isTokenValid(data.token)) {
+      setUser(data);
+      setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
   }, []);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     cookieStorageManager.set(storage_key, user, { maxAge: 60 * 60 * 24 * 1 });
-  //   }
-  // }, [user]);
 
   const login = async (email: string, password: string) => {
     const data = await loginUser({ email, password });
-    setUser(data);
+    if (data && isTokenValid(data.token)) {
+      setUser(data);
+      setIsAuthenticated(true);
+    } else {
+      throw new Error("Token inválido o expirado");
+    }
   };
 
   const logout = () => {
     setUser(null);
+    setIsAuthenticated(false);
     cookieStorageManager.remove(storage_key);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, login, logout }}
-    >
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

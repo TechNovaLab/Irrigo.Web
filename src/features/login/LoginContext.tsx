@@ -2,13 +2,14 @@
 
 import { createContext, useContext, useState } from "react";
 import { LoginContextProps, LoginFormData, ToastData } from "./login.types";
-import { loginUser } from "./loginService";
+import { useAuth } from "@/contexts/auth/AuthContext";
 
 const LoginContext = createContext<LoginContextProps | undefined>(undefined);
 
 export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -23,11 +24,10 @@ export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSubmit = async () => {
     try {
       const payload = { ...formData };
-      console.log("login handleSubmit entered");
-      const response = await loginUser(payload);
+      await login(payload.email, payload.password);
 
       setToast({
-        message: `Login completado correctamente: ${response.publicId}`,
+        message: `Login completado correctamente.`,
         type: "success",
       });
 
