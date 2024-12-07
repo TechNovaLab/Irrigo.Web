@@ -1,10 +1,11 @@
-import { LoginForm } from "@/features/login/LoginForm";
+import { LoginForm } from "@/features/login";
+import { LoginProvider } from "@/features/login/LoginContext";
 
 const Login = () => {
   return (
-    <>
+    <LoginProvider>
       <LoginForm />
-    </>
+    </LoginProvider>
   );
 };
 

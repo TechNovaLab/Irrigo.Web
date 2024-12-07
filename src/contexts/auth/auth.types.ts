@@ -1,4 +1,4 @@
-import { UserIdentity } from "@/features/login/types";
+import { UserIdentity } from "@/features/login/login.types";
 
 export interface AuthContextProps {
   user: UserIdentity | null;

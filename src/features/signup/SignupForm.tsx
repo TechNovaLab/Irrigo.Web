@@ -19,7 +19,6 @@ export default function SignupForm() {
       </div>
       <div className={styles.signupForm}>
         {toast.message && <Toast message={toast.message} type={toast.type} />}
-        {/* <form className={styles.customSpace}> */}
         <form className="space-y-4">
           <Input
             label="Nombre"
@@ -55,7 +54,7 @@ export default function SignupForm() {
               Registrarse
             </button>
             <button
-              type="submit"
+              type="button"
               className={styles.secondary}
               onClick={() => handleSubmit(true)}
             >

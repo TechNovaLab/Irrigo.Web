@@ -20,9 +20,9 @@ const fetchClient = async (url: string, options: FetchOptions = {}) => {
 
     return response.json();
   } catch (error) {
-    console.error("Error en fetchClient:", error);
+    console.log("Error en fetchClient:", error);
     throw error;
   }
 };
 
-export { fetchClient };
+export default fetchClient;

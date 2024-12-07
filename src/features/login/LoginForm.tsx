@@ -1,24 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import styles from "./LoginForm.module.css";
+import React from "react";
+import { useLoginContext } from "./LoginContext";
 import { Input, InputPassword } from "@/components/Input";
-import { useAuth } from "@/contexts/auth/AuthContext";
+import Toast from "@/components/Toast/Toast";
+import styles from "./LoginForm.module.css";
 
-export const LoginForm: React.FC = () => {
-  const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+export default function LoginForm() {
+  const { formData, toast, handleInputChange, handleSubmit } =
+    useLoginContext();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(email, password);
-    } catch (err) {
-      setError(`Invalid credentials: ${err}`);
-    }
-  };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -26,26 +17,30 @@ export const LoginForm: React.FC = () => {
           Inicia sesión en tu cuenta
         </h2>
       </div>
-      <div className={styles.loginForm} onSubmit={handleSubmit}>
+      <div className={styles.loginForm}>
+        {toast.message && <Toast message={toast.message} type={toast.type} />}
         <form className="space-y-4">
           <Input
             label="Email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleInputChange}
           />
           <InputPassword
             label="Password"
             name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleInputChange}
           />
-          {error && <p className={styles.error}>{error}</p>}
-          <button type="submit" className={styles.primary}>
+          <button
+            type="button"
+            className={styles.primary}
+            onClick={() => handleSubmit()}
+          >
             Login
           </button>
         </form>
       </div>
     </div>
   );
-};
+}

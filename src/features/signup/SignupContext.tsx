@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from "react";
 import { generateGuestCredentials } from "@/utils/guestHelpers";
-import { SignupContextProps, SignupFormData, ToastData } from "./types";
+import { SignupContextProps, SignupFormData, ToastData } from "./signup.types";
 import { registerUser } from "./signupService";
 
 const SignupContext = createContext<SignupContextProps | undefined>(undefined);
@@ -35,7 +35,7 @@ export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
 
       setToast({
         message: `Registro ${isGuest ? "como invitado" : ""} exitoso. ID: ${
-          response.Id
+          response.publicId
         }`,
         type: "success",
       });
