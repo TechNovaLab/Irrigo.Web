@@ -10,12 +10,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<UserIdentity | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const storage_key = "user_identity";
 
   const isTokenValid = (token: string): boolean => {
     try {
       const { exp } = jwtDecode<{ exp: number }>(token);
+      console.log("IsTokenValid", Date.now() < exp * 1000);
       return Date.now() < exp * 1000;
     } catch (error) {
       console.log("Token error", error);
@@ -25,7 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const data = cookieStorageManager.get(storage_key);
-    console.log("AuthContext: Checking storage key data:", data);
     if (data && isTokenValid(data.token)) {
       setUser(data);
       setIsAuthenticated(true);
@@ -33,6 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(null);
       setIsAuthenticated(false);
     }
+    setIsInitialized(true);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -52,7 +54,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isInitialized, isAuthenticated, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
