@@ -10,9 +10,7 @@ const Login = () => {
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    console.log("(login...) is authenticated...", isAuthenticated);
     if (isAuthenticated) {
-      console.log("Ha ejecutado el push");
       redirect("/main");
     }
   }, [isAuthenticated]);

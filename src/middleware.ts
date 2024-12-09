@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookieStorageManager } from "./utils";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
