@@ -1,7 +1,6 @@
 "use client";
 
-import { LoginProvider } from "@/features/login/LoginContext";
-import { LoginForm } from "@/features/login";
+import { LoginForm, LoginProvider } from "@/features/login";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";

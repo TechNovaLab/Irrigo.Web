@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { useLoginContext } from "./LoginContext";
+import { useLoginContext } from "../hooks/useLoginContext";
 import { Input, InputPassword } from "@/components/Input";
-import Toast from "@/components/Toast/Toast";
 import styles from "./LoginForm.module.css";
+import Toast from "@/components/Toast/Toast";
 
 export default function LoginForm() {
-  const { formData, toast, handleInputChange, handleSubmit } =
-    useLoginContext();
+  const { formData, toast, handleInputChange, handleSubmit } = useLoginContext();
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -20,23 +19,9 @@ export default function LoginForm() {
       <div className={styles.loginForm}>
         {toast.message && <Toast message={toast.message} type={toast.type} />}
         <form className="space-y-4">
-          <Input
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-          <InputPassword
-            label="Password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-          <button
-            type="button"
-            className={styles.primary}
-            onClick={() => handleSubmit()}
-          >
+          <Input label="Email" name="email" value={formData.email} onChange={handleInputChange} />
+          <InputPassword label="Password" name="password" value={formData.password} onChange={handleInputChange} />
+          <button type="button" className={styles.primary} onClick={() => handleSubmit()}>
             Login
           </button>
         </form>

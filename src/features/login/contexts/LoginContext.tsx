@@ -1,14 +1,14 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-import { LoginContextProps, LoginFormData, ToastData } from "./login.types";
+import { createContext } from "react";
+import { LoginContextProps } from "../types/LoginContextProps";
 import { useAuth } from "@/contexts/auth/AuthContext";
+import { useState } from "react";
+import { LoginFormData } from "../types/LoginFormData";
+import { ToastData } from "../types/ToastData";
 
-const LoginContext = createContext<LoginContextProps | undefined>(undefined);
-
-export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const LoginContext = createContext<LoginContextProps | undefined>(undefined);
+export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -45,18 +45,8 @@ export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <LoginContext.Provider
-      value={{ formData, toast, handleInputChange, handleSubmit }}
-    >
+    <LoginContext.Provider value={{ formData, toast, handleInputChange, handleSubmit }}>
       {children}
     </LoginContext.Provider>
   );
-};
-
-export const useLoginContext = (): LoginContextProps => {
-  const context = useContext(LoginContext);
-  if (!context) {
-    throw new Error("useLoginContext must be used within a LoginProvider");
-  }
-  return context;
 };

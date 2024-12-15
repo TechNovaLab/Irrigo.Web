@@ -1,10 +1,9 @@
 "use client";
 
-import { SignupProvider } from "@/features/signup/SignupContext";
-import { SignupForm } from "@/features/signup";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
+import { SignupProvider, SignupForm } from "@/features/signup";
 
 const Signup = () => {
   const { isAuthenticated } = useAuth();

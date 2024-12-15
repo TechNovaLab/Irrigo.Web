@@ -1,16 +1,16 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
-import { generateGuestCredentials } from "@/utils/guestHelpers";
-import { SignupContextProps, SignupFormData, ToastData } from "./signup.types";
-import { registerUser } from "./signupService";
+import { createContext } from "react";
+import { SignupContextProps } from "../types/SignupContextProps";
+import React, { useState } from "react";
 import { useAuth } from "@/contexts/auth/AuthContext";
+import { userRepository } from "@/domain/repositories/userRepository";
+import { SignupFormData } from "../types/SignupFormData";
+import { generateGuestCredentials } from "@/utils/guestHelpers";
+import { ToastData } from "../types/ToastData";
 
-const SignupContext = createContext<SignupContextProps | undefined>(undefined);
-
-export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const SignupContext = createContext<SignupContextProps | undefined>(undefined);
+export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState<SignupFormData>({
     firstName: "",
@@ -33,13 +33,11 @@ export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
         payload = generateGuestCredentials();
       }
 
-      const response = await registerUser(payload);
+      const response = await userRepository.register(payload);
       await login(payload.email, payload.password);
 
       setToast({
-        message: `Registro ${isGuest ? "como invitado" : ""} exitoso. ID: ${
-          response.publicId
-        }`,
+        message: `Registro ${isGuest ? "como invitado" : ""} exitoso. ID: ${response.id}`,
         type: "success",
       });
 
@@ -57,18 +55,8 @@ export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <SignupContext.Provider
-      value={{ formData, toast, handleInputChange, handleSubmit }}
-    >
+    <SignupContext.Provider value={{ formData, toast, handleInputChange, handleSubmit }}>
       {children}
     </SignupContext.Provider>
   );
-};
-
-export const useSignupContext = (): SignupContextProps => {
-  const context = useContext(SignupContext);
-  if (!context) {
-    throw new Error("useSignupContext must be used within a SignupProvider");
-  }
-  return context;
 };

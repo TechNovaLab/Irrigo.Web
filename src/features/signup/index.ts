@@ -1,4 +1,2 @@
-export { useSignupContext } from "./SignupContext";
-export { default as SignupForm } from "./SignupForm";
-export { registerUser } from "./signupService";
-export * from "./signup.types";
+export { SignupProvider } from "./contexts/SignupContext";
+export { default as SignupForm } from "./components/SignupForm";
