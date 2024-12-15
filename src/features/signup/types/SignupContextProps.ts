@@ -1,14 +1,5 @@
-export interface SignupFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-export interface ToastData {
-  message: string;
-  type: "success" | "error" | "";
-}
+import { SignupFormData } from "./SignupFormData";
+import { ToastData } from "./ToastData";
 
 export interface SignupContextProps {
   formData: SignupFormData;
