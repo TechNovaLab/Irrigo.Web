@@ -1,12 +1,17 @@
-import LeafIcon from "@/components/Icon/LeafIcon";
-import React from "react";
+"use client";
 
-const Main = () => {
+import React from "react";
+import CropFrom from "./CropForm";
+import { TableProvider } from "@/contexts/table/TableContext";
+
+const Dashboard = () => {
   return (
     <>
-      <LeafIcon />
+      <TableProvider>
+        <CropFrom />
+      </TableProvider>
     </>
   );
 };
 
-export default Main;
+export default Dashboard;
