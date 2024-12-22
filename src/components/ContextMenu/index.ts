@@ -1,2 +1,2 @@
-export { default as ContextMenu } from "./ContextMenu";
-export * from "./ContextMenu.types";
+export { default as ContextMenu } from "./components/ContextMenu";
+export { ContextMenuProvider } from "./contexts/ContextMenuContext";

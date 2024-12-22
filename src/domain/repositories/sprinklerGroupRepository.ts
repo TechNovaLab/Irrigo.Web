@@ -8,6 +8,10 @@ class SprinklerGroupRepository extends BaseRepository {
   async createGroup(request: CreateSprinklerGroupRequest): Promise<SprinklerGroup> {
     return this.create("sprinklers/create-group", request);
   }
+
+  async getGroups(): Promise<SprinklerGroup[]> {
+    return this.getAll("sprinklers/sprinkler-groups");
+  }
 }
 
 export const sprinklerGroupRepository = new SprinklerGroupRepository(

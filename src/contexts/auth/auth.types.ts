@@ -1,7 +1,7 @@
-import { UserIdentity } from "@/features/login/login.types";
+import { UserIdentity } from "@/domain/models/UserIdentity";
 
 export interface AuthContextProps {
-  user: UserIdentity | null;
+  userIdentity: UserIdentity | null;
   isInitialized: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;

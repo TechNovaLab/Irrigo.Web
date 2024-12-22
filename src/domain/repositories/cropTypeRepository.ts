@@ -10,7 +10,7 @@ class CropTypeRepository extends BaseRepository {
   }
 
   async getCropTypes(): Promise<CropType[]> {
-    return this.getAll("crops/");
+    return this.getAll("crops/crop-types");
   }
 }
 

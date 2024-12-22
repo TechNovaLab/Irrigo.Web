@@ -24,7 +24,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-main {
+main#pagesMain {
   background: radial-gradient(
     600px at center 8%,
     rgb(106, 95, 193, 0.15),
