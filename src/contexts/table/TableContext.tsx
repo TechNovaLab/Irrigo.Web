@@ -10,9 +10,7 @@ export const TableProvider = ({ children }: { children: React.ReactNode }) => {
     setRows((prev) => [
       ...prev,
       {
-        ...Object.fromEntries(
-          Object.keys(prev[0] || {}).map((key) => [key, null])
-        ),
+        ...Object.fromEntries(Object.keys(prev[0] || {}).map((key) => [key, null])),
         id: Date.now(),
       },
     ]);
@@ -23,23 +21,17 @@ export const TableProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const saveRow = (id: number, data: any) => {
-    setRows((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, ...data } : row))
-    );
+    console.log("esaveRow entered??");
+    setRows((prev) => prev.map((row) => (row.id === id ? { ...row, ...data } : row)));
   };
 
   return (
-    <TableContext.Provider
-      value={{ rows, addRow, deleteRow, saveRow, setRows }}
-    >
-      {children}
-    </TableContext.Provider>
+    <TableContext.Provider value={{ rows, addRow, deleteRow, saveRow, setRows }}>{children}</TableContext.Provider>
   );
 };
 
 export const useTableContext = () => {
   const context = useContext(TableContext);
-  if (!context)
-    throw new Error("useTableContext must be used within a TableProvider");
+  if (!context) throw new Error("useTableContext must be used within a TableProvider");
   return context;
 };

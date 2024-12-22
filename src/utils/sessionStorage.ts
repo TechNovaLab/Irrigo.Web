@@ -38,7 +38,6 @@ const cookieStorageManager = {
       const cookies = parse(document.cookie || "");
       const value = cookies[key];
 
-      console.log("CookieValue", value);
       return value ? JSON.parse(value) : null;
     }
     return null;

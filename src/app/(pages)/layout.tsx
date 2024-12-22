@@ -33,7 +33,10 @@ const PagesLayout: React.FC<PagesLayoutProps> = ({ children }) => {
         </div>
       </header>
 
-      <main className="flex-grow w-full max-w-4xl mx-auto px-4 py-8">
+      <main
+        id="pagesMain"
+        className="flex-grow w-full max-w-4xl mx-auto px-4 py-8"
+      >
         {children}
       </main>
 

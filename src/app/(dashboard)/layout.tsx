@@ -16,7 +16,7 @@ export default function DashboradLayout({
       logout();
       redirect("/auth/login");
     }
-  }, [isAuthenticated]);
+  }, [isInitialized, isAuthenticated, logout]);
 
   return (
     <div className="flex h-screen bg-white text-[#1f1633] dark:text-white">
