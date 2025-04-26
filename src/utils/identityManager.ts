@@ -1,4 +1,4 @@
-import { UserIdentity } from "@/domain/models/UserIdentity";
+import { UserIdentity } from "@/core/domain/models/UserIdentity";
 import { cookieStorageManager } from "./sessionStorage";
 
 const storage_key = "user_identity";

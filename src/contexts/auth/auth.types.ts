@@ -1,4 +1,4 @@
-import { UserIdentity } from "@/domain/models/UserIdentity";
+import { UserIdentity } from "@/core/domain/models/UserIdentity";
 
 export interface AuthContextProps {
   userIdentity: UserIdentity | null;

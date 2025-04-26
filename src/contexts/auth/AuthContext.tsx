@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContextProps } from "./auth.types";
 import { jwtDecode } from "jwt-decode";
-import { userRepository } from "@/domain/repositories/userRepository";
+import { userRepository } from "@/core/domain/repositories/userRepository";
 import { identityManager } from "@/utils";
-import { UserIdentity } from "@/domain/models/UserIdentity";
+import { UserIdentity } from "@/core/domain/models/UserIdentity";
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

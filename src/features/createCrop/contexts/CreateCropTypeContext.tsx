@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react";
 import { CreateCropTypeContextProps } from "../types/CreateCropTypeContextProps";
 import { CreateCropTypeData } from "../types/CreateCropTypeData";
-import { cropTypeRepository } from "@/domain/repositories/cropTypeRepository";
+import { cropTypeRepository } from "@/core/domain/repositories/cropTypeRepository";
 import { ToastData } from "../types/ToastData";
 import { OnCompleteCallback } from "../types/OnCompleteCallback";
 import { OnCancelCallback } from "../types/OnCancelCallback";

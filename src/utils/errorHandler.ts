@@ -1,4 +1,4 @@
-import { ApplicationError } from "@/domain/errors/ApplicationError";
+import { ApplicationError } from "@/core/domain/errors/ApplicationError";
 
 export const handleError = (error: unknown): void => {
   if (error instanceof ApplicationError) {

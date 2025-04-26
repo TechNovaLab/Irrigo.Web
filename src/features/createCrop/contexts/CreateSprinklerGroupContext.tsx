@@ -3,7 +3,7 @@ import { CreateSprinklerGroupContextProps } from "../types/CreateSprinklerGroupC
 import { OnCompleteCallback } from "../types/OnCompleteCallback";
 import { ToastData } from "../types/ToastData";
 import { CreateSprinklerGroupData } from "../types/CreateSprinklerGroupData";
-import { sprinklerGroupRepository } from "@/domain/repositories/sprinklerGroupRepository";
+import { sprinklerGroupRepository } from "@/core/domain/repositories/sprinklerGroupRepository";
 import { OnCancelCallback } from "../types/OnCancelCallback";
 
 export const CreateSprinklerGroupContext = createContext<CreateSprinklerGroupContextProps | null>(null);

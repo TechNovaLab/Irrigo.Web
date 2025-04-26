@@ -4,7 +4,7 @@ import { createContext } from "react";
 import { SignupContextProps } from "../types/SignupContextProps";
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/auth/AuthContext";
-import { userRepository } from "@/domain/repositories/userRepository";
+import { userRepository } from "@/core/domain/repositories/userRepository";
 import { SignupFormData } from "../types/SignupFormData";
 import { generateGuestCredentials } from "@/utils/guestHelpers";
 import { ToastData } from "../types/ToastData";

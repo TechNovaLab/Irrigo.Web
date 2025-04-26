@@ -16,12 +16,12 @@ import {
 } from "@/features/createCrop";
 import { ContextMenu, ContextMenuProvider } from "@/components/ContextMenu";
 import { DataSourceItem } from "@/components/ContextMenu/types/DataSourceItem";
-import { cropTypeRepository } from "@/domain/repositories/cropTypeRepository";
-import { planterRepository } from "@/domain/repositories/planterRepository";
-import { sprinklerGroupRepository } from "@/domain/repositories/sprinklerGroupRepository";
+import { cropTypeRepository } from "@/core/domain/repositories/cropTypeRepository";
+import { planterRepository } from "@/core/domain/repositories/planterRepository";
+import { sprinklerGroupRepository } from "@/core/domain/repositories/sprinklerGroupRepository";
 import { Input } from "@/components/Input";
-import { cropRepository } from "@/domain/repositories/cropRepository";
-import { CreateCropRequest } from "@/domain/api/requests/CreateCropRequest";
+import { cropRepository } from "@/core/domain/repositories/cropRepository";
+import { CreateCropRequest } from "@/core/domain/api/requests/CreateCropRequest";
 import Toast from "@/components/Toast/Toast";
 
 export default function CropFrom() {

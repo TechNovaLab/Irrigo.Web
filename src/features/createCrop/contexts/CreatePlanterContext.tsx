@@ -3,7 +3,7 @@ import { CreatePlanterContextProps } from "../types/CreatePlanterContextProps";
 import { OnCompleteCallback } from "../types/OnCompleteCallback";
 import { ToastData } from "../types/ToastData";
 import { CreatePlanterData } from "../types/CreatePlanterData";
-import { planterRepository } from "@/domain/repositories/planterRepository";
+import { planterRepository } from "@/core/domain/repositories/planterRepository";
 import { OnCancelCallback } from "../types/OnCancelCallback";
 
 export const CreatePlanterContext = createContext<CreatePlanterContextProps | null>(null);
