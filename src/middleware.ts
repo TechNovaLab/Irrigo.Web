@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const publicRoutes = ["/", "/welcome", "/signup", "/auth/login"];
+  const publicRoutes = ["/", "/welcome", "/signup", "/login"];
   const protectedRoutes = ["/main", "/settings"];
   const storage_key = "user_identity";
   const session = request.cookies.get(storage_key);
@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (!session && protectedRoutes.some((route) => pathname.startsWith(route))) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (session && publicRoutes.includes(pathname)) {
@@ -30,7 +30,7 @@ export const config = {
     "/",
     "/welcome",
     "/signup",
-    "/auth/login",
+    "/login",
     "/main/:path*",
     "/settings/:path*",
   ],

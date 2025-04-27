@@ -1,28 +1,29 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTableContext } from "@/contexts/table/TableContext";
-import { Table, TableRow } from "@/components/Table";
-import { Modal } from "@/components/Modal";
+import { useTableContext } from "@/presentation/contexts/table/TableContext";
+import { DataTable, DataTableRow } from "@/presentation/components/ui/DataTable";
+import { Dialog as Modal } from "@/presentation/components/ui/Dialog";
 import { FaSave } from "react-icons/fa";
 import { FaPlus, FaTrash } from "react-icons/fa6";
-import {
-  CreateCropType,
-  CreateCropTypeProvider,
-  CreatePlanter,
+import { cropTypeRepository } from "@/core/infrastructure/repositories/cropTypeRepository";
+import { planterRepository } from "@/core/infrastructure/repositories/planterRepository";
+import { sprinklerGroupRepository } from "@/core/infrastructure/repositories/sprinklerGroupRepository";
+import { Input } from "@/presentation/components/ui/Input";
+import { cropRepository } from "@/core/infrastructure/repositories/cropRepository";
+import { CreateCropRequest } from "@/core/infrastructure/api/requests/CreateCropRequest";
+import Toast from "@/presentation/components/ui/Snackbar/Snackbar";
+import { SnackbarType } from "@/presentation/components/ui/Snackbar/Snackbar.types";
+import { MenuOption, MenuProvider } from "@/presentation/components/ui/Menu";
+import Menu from "@/presentation/components/ui/Menu/Menu";
+import { 
+  CreateCropTypeForm, 
+  CreateCropTypeProvider, 
+  CreatePlanterForm, 
   CreatePlanterProvider,
-  CreateSprinklerGroup,
+  CreateSprinklerGroupForm,
   CreateSprinklerGroupProvider,
-} from "@/features/createCrop";
-import { ContextMenu, ContextMenuProvider } from "@/components/ContextMenu";
-import { DataSourceItem } from "@/components/ContextMenu/types/DataSourceItem";
-import { cropTypeRepository } from "@/domain/repositories/cropTypeRepository";
-import { planterRepository } from "@/domain/repositories/planterRepository";
-import { sprinklerGroupRepository } from "@/domain/repositories/sprinklerGroupRepository";
-import { Input } from "@/components/Input";
-import { cropRepository } from "@/domain/repositories/cropRepository";
-import { CreateCropRequest } from "@/domain/api/requests/CreateCropRequest";
-import Toast from "@/components/Toast/Toast";
+} from "@/presentation/components/features";
 
 export default function CropFrom() {
   const { rows, addRow, deleteRow, setRows } = useTableContext();
@@ -33,7 +34,7 @@ export default function CropFrom() {
 
   const [toast, setToast] = useState<{
     message: string;
-    type: string;
+    type: SnackbarType;
     linkText?: string;
     onLinkClick?: () => void;
   } | null>(null);
@@ -41,7 +42,7 @@ export default function CropFrom() {
   // #region cropTypes
 
   const [cropTypeSelected, setCropTypeSelected] = useState<number | null>(null);
-  const [cropTypeDataSource, setCropTypesDataSource] = useState<DataSourceItem[]>([]);
+  const [cropTypeDataSource, setCropTypesDataSource] = useState<MenuOption[]>([]);
 
   const handleAddCropTypeRecord = (data: { id: number; name: string }) => {
     const newRecord = mapToDataSourceItem(data);
@@ -55,7 +56,7 @@ export default function CropFrom() {
   // #region planters
 
   const [planterSelected, setPlanterSelected] = useState<number | null>(null);
-  const [planterDataSource, setPlantersDataSource] = useState<DataSourceItem[]>([]);
+  const [planterDataSource, setPlantersDataSource] = useState<MenuOption[]>([]);
 
   const handleAddPlanterRecord = (data: { id: number; name: string }) => {
     const newRecord = mapToDataSourceItem(data);
@@ -69,7 +70,7 @@ export default function CropFrom() {
   // #region sprinkler groups
 
   const [sprinklerGroupSelected, setSprinklerGroupSelected] = useState<number | null>(null);
-  const [sprinklerGroupDataSource, setSprinklerGroupsDataSource] = useState<DataSourceItem[]>([]);
+  const [sprinklerGroupDataSource, setSprinklerGroupsDataSource] = useState<MenuOption[]>([]);
 
   const hnadleAddSprinklerGroupRecord = (data: { id: number; name: string }) => {
     const newRecord = mapToDataSourceItem(data);
@@ -88,7 +89,7 @@ export default function CropFrom() {
           cropTypeRepository.getCropTypes(),
           planterRepository.getPlanters(),
           sprinklerGroupRepository.getGroups(),
-        ]);
+        ]); 
 
         setCropTypesDataSource(cropTypes.map((val) => mapToDataSourceItem(val)));
         setPlantersDataSource(planters.map((val) => mapToDataSourceItem(val)));
@@ -115,7 +116,7 @@ export default function CropFrom() {
     fetchAllData();
   }, [setRows]);
 
-  const mapToDataSourceItem = (data: { id: number; name: string }): DataSourceItem => ({
+  const mapToDataSourceItem = (data: { id: number; name: string }): MenuOption => ({
     id: data.id,
     label: data.name,
   });
@@ -125,8 +126,6 @@ export default function CropFrom() {
   };
 
   const validateAndSave = async (row: any) => {
-    // const row = rows[0];
-    console.log("current row", row);
     if (!row.name || !row.plantUnits || !cropTypeSelected || !planterSelected || !sprinklerGroupSelected) {
       setToast({
         message: "Por favor, completa todos los campos antes de guardar.",
@@ -162,9 +161,9 @@ export default function CropFrom() {
 
   return (
     <div>
-      <Table columns={["Cultivo", "Unidades", "Tipo de cultivo", "Jardinera", "Grupo de Aspersores", "Acciones"]}>
+      <DataTable columns={["Cultivo", "Unidades", "Tipo de cultivo", "Jardinera", "Grupo de Aspersores", "Acciones"]}>
         {rows.map((row) => (
-          <TableRow
+          <DataTableRow
             key={row.id}
             id={row.id}
             columns={[
@@ -190,42 +189,39 @@ export default function CropFrom() {
                   )
                 }
               />,
-              <ContextMenuProvider key={row.id} onAddNew={() => setModalState({ type: "cropType", isOpen: true })}>
-                <ContextMenu
+              <MenuProvider key={row.id} onAddNew={() => setModalState({ type: "cropType", isOpen: true })}>
+                <Menu
                   options={cropTypeDataSource}
                   selectedOption={row.cropTypeId || cropTypeSelected}
                   onSelect={(id) => {
-                    console.log("selected crop type", id);
-                    setCropTypeSelected(id);
-                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, cropTypeId: id } : r)));
+                    setCropTypeSelected(Number(id));
+                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, cropTypeId: Number(id) } : r)));
                   }}
                 />
-              </ContextMenuProvider>,
-              <ContextMenuProvider key={row.id} onAddNew={() => setModalState({ type: "planter", isOpen: true })}>
-                <ContextMenu
+              </MenuProvider>,
+              <MenuProvider key={row.id} onAddNew={() => setModalState({ type: "planter", isOpen: true })}>
+                <Menu
                   options={planterDataSource}
                   selectedOption={row.planterId || planterSelected}
                   onSelect={(id) => {
-                    console.log("selected planter", id);
-                    setPlanterSelected(id);
-                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, planterId: id } : r)));
+                    setPlanterSelected(Number(id));
+                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, planterId: Number(id) } : r)));
                   }}
                 />
-              </ContextMenuProvider>,
-              <ContextMenuProvider
+              </MenuProvider>,
+              <MenuProvider
                 key={row.id}
                 onAddNew={() => setModalState({ type: "sprinklerGroup", isOpen: true })}
               >
-                <ContextMenu
+                <Menu
                   options={sprinklerGroupDataSource}
                   selectedOption={row.sprinklerGroupId || sprinklerGroupSelected}
                   onSelect={(id) => {
-                    console.log("selected sprinkler group", id);
-                    setSprinklerGroupSelected(id);
-                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, sprinklerGroupId: id } : r)));
+                    setSprinklerGroupSelected(Number(id));
+                    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, sprinklerGroupId: Number(id) } : r)));
                   }}
                 />
-              </ContextMenuProvider>,
+              </MenuProvider>,
             ]}
           >
             <button className="text-green-500 mx-2" onClick={() => validateAndSave(row)}>
@@ -237,7 +233,7 @@ export default function CropFrom() {
             <button className="text-blue-500 mx-2" onClick={addRow}>
               <FaPlus />
             </button>
-          </TableRow>
+          </DataTableRow>
         ))}
         {rows.length === 0 && (
           <tr>
@@ -248,7 +244,7 @@ export default function CropFrom() {
             </td>
           </tr>
         )}
-      </Table>
+      </DataTable>
       <Modal
         isOpen={modalState.isOpen}
         title={
@@ -262,17 +258,17 @@ export default function CropFrom() {
       >
         {modalState.type === "cropType" && (
           <CreateCropTypeProvider onCancel={handleModalClose} onComplete={handleAddCropTypeRecord}>
-            <CreateCropType />
+            <CreateCropTypeForm />
           </CreateCropTypeProvider>
         )}
         {modalState.type === "planter" && (
           <CreatePlanterProvider onCancel={handleModalClose} onComplete={handleAddPlanterRecord}>
-            <CreatePlanter />
+            <CreatePlanterForm />
           </CreatePlanterProvider>
         )}
         {modalState.type === "sprinklerGroup" && (
           <CreateSprinklerGroupProvider onCancel={handleModalClose} onComplete={hnadleAddSprinklerGroupRecord}>
-            <CreateSprinklerGroup />
+            <CreateSprinklerGroupForm />
           </CreateSprinklerGroupProvider>
         )}
       </Modal>
