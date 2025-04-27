@@ -2,7 +2,7 @@
 
 import React from "react";
 import CropFrom from "./CropForm";
-import { TableProvider } from "@/contexts/table/TableContext";
+import { TableProvider } from "@/presentation/contexts/table/TableContext";
 
 const Dashboard = () => {
   return (
