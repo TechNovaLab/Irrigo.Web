@@ -1,26 +1,26 @@
 import React, { createContext, useState } from "react";
-import { CreatePlanterContextProps } from "./CreatePlanterContextProps";
-import { OnCompleteCallback } from "../../../domain/shared/CompleteCallback";
-import { ToastData } from "../../../domain/shared/Notification";
-import { CreatePlanterData } from "./CreatePlanterFormData";
+import { CreatePlanterContextProps } from "@/core/application/features/createPlanter/CreatePlanterContextProps";
+import { CompleteCallback } from "@/core/domain/shared/CompleteCallback";
+import { Notification } from "@/core/domain/shared/Notification";
+import { CreatePlanterFormData } from "@/core/application/features/createPlanter/CreatePlanterFormData";
 import { planterRepository } from "@/core/infrastructure/repositories/planterRepository";
-import { OnCancelCallback } from "../../../domain/shared/CancelCallback";
+import { CancelCallback } from "@/core/domain/shared/CancelCallback";
 
 export const CreatePlanterContext = createContext<CreatePlanterContextProps | null>(null);
 
 export const CreatePlanterProvider: React.FC<{
   children: React.ReactNode;
-  onComplete: OnCompleteCallback<{ id: number; name: string }>;
-  onCancel: OnCancelCallback;
+  onComplete: CompleteCallback<{ id: number; name: string }>;
+  onCancel: CancelCallback;
 }> = ({ children, onComplete, onCancel }) => {
-  const [toast, setToast] = useState<ToastData>({ message: "", type: "" });
-  const [formData, setFormData] = useState<CreatePlanterData>({
+  const [toast, setToast] = useState<Notification>({ message: "", type: "" });
+  const [formData, setFormData] = useState<CreatePlanterFormData>({
     name: "",
     description: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev: CreatePlanterFormData) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSave = async () => {

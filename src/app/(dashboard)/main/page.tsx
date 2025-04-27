@@ -1,17 +1,15 @@
 "use client";
 
 import React from "react";
-import CropFrom from "./CropForm";
 import { TableProvider } from "@/presentation/contexts/table/TableContext";
+import { CreateCropProvider, CreateCropForm } from "@/presentation/components/features";
 
-const Dashboard = () => {
+export default function Dashboard() {
   return (
-    <>
-      <TableProvider>
-        <CropFrom />
-      </TableProvider>
-    </>
+    <TableProvider>
+      <CreateCropProvider>
+        <CreateCropForm />
+      </CreateCropProvider>
+    </TableProvider>
   );
-};
-
-export default Dashboard;
+}

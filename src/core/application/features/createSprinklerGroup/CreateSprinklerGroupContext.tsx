@@ -1,20 +1,20 @@
 import React, { createContext, useState } from "react";
-import { CreateSprinklerGroupContextProps } from "../types/CreateSprinklerGroupContextProps";
-import { OnCompleteCallback } from "../../../core/domain/shared/CompleteCallback";
-import { ToastData } from "../../../core/domain/shared/Notification";
-import { CreateSprinklerGroupData } from "../types/CreateSprinklerGroupData";
+import { CreateSprinklerGroupContextProps } from "./CreateSprinklerGroupContextProps";
+import { CompleteCallback } from "@/core/domain/shared/CompleteCallback";
+import { Notification } from "@/core/domain/shared/Notification";
+import { CreateSprinklerGroupFormData } from "./CreateSprinklerGroupFormData";
+import { CancelCallback } from "@/core/domain/shared/CancelCallback";
 import { sprinklerGroupRepository } from "@/core/infrastructure/repositories/sprinklerGroupRepository";
-import { OnCancelCallback } from "../../../core/domain/shared/CancelCallback";
 
 export const CreateSprinklerGroupContext = createContext<CreateSprinklerGroupContextProps | null>(null);
 
 export const CreateSprinklerGroupProvider: React.FC<{
   children: React.ReactNode;
-  onComplete: OnCompleteCallback<{ id: number; name: string }>;
-  onCancel: OnCancelCallback;
+  onComplete: CompleteCallback<{ id: number; name: string }>;
+  onCancel: CancelCallback;
 }> = ({ children, onComplete, onCancel }) => {
-  const [toast, setToast] = useState<ToastData>({ message: "", type: "" });
-  const [formData, setFormData] = useState<CreateSprinklerGroupData>({
+  const [toast, setToast] = useState<Notification>({ message: "", type: "" });
+  const [formData, setFormData] = useState<CreateSprinklerGroupFormData>({
     name: "",
   });
 
