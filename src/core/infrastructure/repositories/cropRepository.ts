@@ -1,8 +1,10 @@
 import { identityManager } from "@/shared/utils";
 import { createHttpClient } from "@/core/infrastructure/api/HttpClient";
-import { CreateCropRequest } from "@/core/infrastructure/api/requests/CreateCropRequest";
 import { Crop } from "@/core/domain/entities/Crop";
 import { BaseRepository } from "@/core/infrastructure/repositories/BaseRepository";
+import { RemoveCropRequest } from "@/core/application/features/removeCrop/RemoveCropRequest";
+import { RemoveCropResponse } from "@/core/application/features/removeCrop/RemoveCropResponse";
+import { CreateCropRequest } from "@/core/application/features/createCrop/CreateCropRequest";
 
 class CropRepository extends BaseRepository {
   async createCrop(request: CreateCropRequest): Promise<Crop> {
@@ -11,6 +13,10 @@ class CropRepository extends BaseRepository {
 
   async getCrops(): Promise<Crop[]> {
     return this.getAll("crops/");
+  }
+
+  async removeCrop(request: RemoveCropRequest): Promise<RemoveCropResponse> {
+    return this.delete<RemoveCropResponse>("crops/remove-crop", request.publicId);
   }
 }
 

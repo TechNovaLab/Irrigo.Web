@@ -1,5 +1,5 @@
-import React from "react";
-import { SnackbarProps, SnackbarType } from "@/presentation/components/ui/Snackbar/Snackbar.types";
+import React, { useEffect, useState } from "react";
+import { SnackbarProps } from "@/presentation/components/ui/Snackbar/Snackbar.types";
 
 export default function Snackbar({
   message,
@@ -7,6 +7,19 @@ export default function Snackbar({
   linkText,
   onLinkClick,
 }: SnackbarProps) {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [message]);
+
+  if (!isVisible) return null;
+
   const bgColor =
     type === "success"
       ? "bg-green-500"

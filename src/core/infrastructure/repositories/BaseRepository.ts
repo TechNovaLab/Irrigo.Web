@@ -1,4 +1,6 @@
-export abstract class BaseRepository {
+import { IBaseRepository } from "@/core/domain/repositories/IBaseRepository";
+
+export abstract class BaseRepository implements IBaseRepository {
   private readonly apiClient: <T>(url: string, options: RequestInit) => Promise<T>;
 
   constructor(apiClient: <T>(url: string, options: RequestInit) => Promise<T>) {
@@ -27,8 +29,8 @@ export abstract class BaseRepository {
     });
   }
 
-  async delete(endpoint: string, id: string): Promise<void> {
-    await this.apiClient<void>(`${endpoint}/${id}`, { method: "DELETE" });
+  async delete<TResponse>(endpoint: string, id: string): Promise<TResponse> {
+    return this.apiClient<TResponse>(`${endpoint}/${id}`, { method: "DELETE" });
   }
 
   async authenticate<TRequest, TModel>(endpoint: string, credentials: TRequest): Promise<TModel> {
