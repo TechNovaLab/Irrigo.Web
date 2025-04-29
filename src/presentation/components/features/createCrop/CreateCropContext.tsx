@@ -1,18 +1,20 @@
 import React, { createContext, useState, useEffect } from "react";
 import { CreateCropContextProps } from "./CreateCropContextProps";
+import { CreateCropRequest, createCropUseCase } from "@/core/application/features/createCrop";
+import { RemoveCropRequest } from "@/core/application/features/removeCrop/RemoveCropRequest";
+import { removeCropUseCase } from "@/core/application/features/removeCrop/RemoveCropUseCase";
+import { getCropsUseCase } from "@/core/application/features/getCrops";
+import { getCropTypesUseCase } from "@/core/application/features/getCropTypes";
+import { getPlantersUseCase } from "@/core/application/features/getPlanters";
+import { getSprinklerGroupsUseCase } from "@/core/application/features/getSprinklerGroups";
 import { useTableContext } from "@/presentation/contexts/table/TableContext";
-import { cropRepository } from "@/core/infrastructure/repositories/cropRepository";
-import { cropTypeRepository } from "@/core/infrastructure/repositories/cropTypeRepository";
-import { planterRepository } from "@/core/infrastructure/repositories/planterRepository";
-import { sprinklerGroupRepository } from "@/core/infrastructure/repositories/sprinklerGroupRepository";
-import { CreateCropRequest } from "@/core/infrastructure/api/requests/CreateCropRequest";
 import { Notification } from "@/core/domain/shared/Notification";
 import { MenuOption } from "@/presentation/components/ui/Menu";
 
 export const CreateCropContext = createContext<CreateCropContextProps | null>(null);
 
 export const CreateCropProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { rows, addRow, deleteRow, setRows } = useTableContext();
+  const { rows, addRow, deleteRow: deleteTableRow, setRows } = useTableContext();
   const [modalState, setModalState] = useState<{ type: "cropType" | "planter" | "sprinklerGroup" | null; isOpen: boolean }>({ type: null, isOpen: false });
   const [toast, setToast] = useState<Notification | null>(null);
 
@@ -29,10 +31,10 @@ export const CreateCropProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const fetchAllData = async () => {
     try {
       const [crops, cropTypes, planters, sprinklerGroups] = await Promise.all([
-        cropRepository.getCrops(),
-        cropTypeRepository.getCropTypes(),
-        planterRepository.getPlanters(),
-        sprinklerGroupRepository.getGroups(),
+        getCropsUseCase.execute(),
+        getCropTypesUseCase.execute(),
+        getPlantersUseCase.execute(),
+        getSprinklerGroupsUseCase.execute(),
       ]);
 
       setCropTypeDataSource(cropTypes.map(mapToDataSourceItem));
@@ -42,6 +44,7 @@ export const CreateCropProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setRows(
         crops.map(crop => ({
           id: crop.id,
+          publicId: crop.publicId,
           name: crop.name,
           plantUnits: crop.plantUnits,
           cropTypeId: crop.cropTypeId,
@@ -87,19 +90,38 @@ export const CreateCropProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setToast({ message: "Por favor, completa todos los campos antes de guardar.", type: "error" });
       return;
     }
-    try {
-      const payload = new CreateCropRequest(
-        row.name,
-        row.plantUnits,
-        cropTypeSelected,
-        planterSelected,
-        sprinklerGroupSelected
-      );
-      const response = await cropRepository.createCrop(payload);
+    try {    
+      const response = await createCropUseCase.execute(
+        new CreateCropRequest(
+          row.name,
+          row.plantUnits,
+          cropTypeSelected,
+          planterSelected,
+          sprinklerGroupSelected
+        ));
+
       setToast({ message: `Cultivo creado correctamente. ID: ${response.publicId}`, type: "success" });
-      setRows(prev => prev.map(r => r.id === row.id ? { ...r, id: response.id } : r));
+      setRows(prev => prev.map(r => r.id === row.id ? { ...r, id: response.id, publicId: response.publicId } : r));
     } catch (error) {
       setToast({ message: `Error al guardar el cultivo: ${error}`, type: "error" });
+    }
+  };
+
+  const handleDeleteRow = async (id: number) => {
+    try {
+      if (id > 0) {
+        const crop = rows.find(row => row.id === id);
+
+        console.log("Current crop", crop);  
+        
+        if (crop && crop.publicId) {
+          await removeCropUseCase.execute(new RemoveCropRequest(crop.publicId));
+          setToast({ message: "Cultivo eliminado correctamente", type: "success" });
+        }
+      }
+      deleteTableRow(id);
+    } catch (error) {
+      setToast({ message: `Error al eliminar el cultivo: ${error}`, type: "error" });
     }
   };
 
@@ -108,7 +130,7 @@ export const CreateCropProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       value={{
         rows,
         addRow,
-        deleteRow,
+        deleteRow: handleDeleteRow,
         setRows,
         setCropTypeSelected,
         setPlanterSelected,

@@ -2,8 +2,8 @@ import { BaseRepository } from "@/core/infrastructure/repositories/BaseRepositor
 import { createHttpClient } from "@/core/infrastructure/api/HttpClient";
 import { User } from "@/core/domain/entities/User";
 import { UserIdentity } from "@/core/domain/entities/UserIdentity";
-import { LoginRequest } from "@/core/infrastructure/api/requests/LoginRequest";
-import { RegisterRequest } from "@/core/infrastructure/api/requests/RegisterRequest";
+import { LoginRequest } from "@/core/application/dtos/LoginRequest";
+import { RegisterRequest } from "@/core/application/dtos/RegisterRequest";
 import { identityManager } from "@/shared/utils";
 
 class UserRepository extends BaseRepository {
